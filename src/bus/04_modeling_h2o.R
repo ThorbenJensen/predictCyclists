@@ -14,6 +14,7 @@ df <-
 # import to h2o
 df2 <- as.h2o(df)
 result <- h2o.randomForest(training_frame = df2, 
-                           x = c("weekday", "weekend", "month", "hour"),
-                           y = "Ein")
+                           x = c("weekday", "weekend", "month", "hour",
+                                 "bank_holiday", "event_send", "rush_hour"),
+                           y = "Ein", nfolds = 7)
 summary(result)
