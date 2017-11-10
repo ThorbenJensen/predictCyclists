@@ -14,9 +14,9 @@ ggplot(df, aes(X, Y)) +
 
 # time line
 ggplot(df, aes(timestamp, Ein)) +
-  geom_line() +
-  scale_x_datetime(limits = c(as.POSIXct("2017-08-01"), 
-                              as.POSIXct("2017-11-15")))
+  geom_line()# +
+  #scale_x_datetime(limits = c(as.POSIXct("2017-08-01"), 
+  #                            as.POSIXct("2017-11-15")))
 
 # time line, aggregated by hour
 ggplot(df, aes(timestamp)) +
