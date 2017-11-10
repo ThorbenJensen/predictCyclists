@@ -23,18 +23,19 @@ df2 <-
   mutate(date = as.Date(Datum, format = "%d.%m.%Y")) %>%
   mutate(weekday = wday(date, abbr = F, label = T)) %>%
   mutate(weekend = (weekday %in% c('Saturday', 'Sunday'))) %>%
-  mutate(month = as.character(month(date))) %>%
-  mutate(year = as.character(year(date))) %>%
+  mutate(month = as.character(lubridate::month(date))) %>%
+  mutate(year = as.character(lubridate::year(date))) %>%
   # time related features
   mutate(date_time = paste(date, Zeit)) %>%
   mutate(timestamp = as.POSIXct(date_time, format = "%Y-%m-%d %H:%M:%S")) %>%
-  mutate(hour = hour(timestamp)) %>%
+  mutate(hour = lubridate::hour(timestamp)) %>%
   # adding bank holidays
   left_join(., bank_holidays, by = 'date') %>%
   mutate(bank_holiday = ifelse(is.na(bank_holiday), 0, bank_holiday)) %>%
   mutate(bank_holiday = as.logical(bank_holiday)) %>%
   # rush hour
-  mutate(rush_hour = ifelse((weekend == F & bank_holiday == F & hour > 6 & hour < 10), 
+  mutate(rush_hour = ifelse((weekend == F & bank_holiday == F & hour > 6 
+                             & hour < 10), 
                             T, F)) %>%
   # event: send
   left_join(., event_send, by = 'date') %>%
@@ -49,7 +50,7 @@ df2 <-
 # remove deprecated columns from data.frame
 df2 <-
   df2 %>%
-  select(-Datum)
+  dplyr::select(-Datum)
 
 # SAVE DATA
 write.csv(df2, "data/processed/bus2.csv")

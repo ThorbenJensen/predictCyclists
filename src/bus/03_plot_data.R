@@ -36,4 +36,6 @@ p
 p <- ggplot(data = df) +
   geom_histogram(aes(x = hour, fill = "stunde"), alpha = 0.25, binwidth = 1)
 p
+
+# at weekdays, how many travellers per hour? -> find out rush hour
 # TODO
