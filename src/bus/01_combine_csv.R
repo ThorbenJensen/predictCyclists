@@ -40,4 +40,4 @@ for (file in files) {
   i <- i + 1
 }
 
-write.csv(target, "data/processed/bus2.csv")
+write.csv(target, "data/processed/bus.csv")

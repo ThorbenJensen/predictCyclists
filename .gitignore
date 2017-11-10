@@ -6,4 +6,4 @@
 data/raw/kfz-data/*
 data/database/*
 data/raw/bus/*
-data/processed/bus.csv
+data/processed/bus*
