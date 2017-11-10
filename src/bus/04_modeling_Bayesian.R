@@ -6,78 +6,81 @@ library(brms)
 
 # load data
 passengers = read.csv("data/processed/bus2.csv")
-
+passengers$month = as.factor(passengers$month)
 # ordered factors don't survive .csv storing, so, re-order weekdays:
 passengers$weekday = factor(passengers$weekday, 
-                       ordered = TRUE,
-                       levels = c("Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"))
+                            ordered = TRUE,
+                            levels = c("Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"))
 
-# 
 
 noOfCores <- parallel::detectCores()
 
-weekday_negbinomial <- brm(Ein ~ weekday,
-                    cores = noOfCores,
-                    family = negbinomial,
+weekdaym <- brm(Ein ~ weekday,
+                cores = noOfCores,
+                family = negbinomial,
+                data = passengers)
+
+weekday_rushm <- brm(Ein ~ weekday,
+                     cores = noOfCores,
+                     family = negbinomial,
+                     data = passengers[passengers$rush_hour == TRUE,])
+
+hourm <- brm(Ein ~ poly(hour, 3),
+             cores = noOfCores,
+             family = negbinomial,
+             data = passengers[!is.na(passengers$hour),])
+
+monthm <- brm(Ein ~ month,
+              cores = noOfCores,
+              family = negbinomial,
+              data = passengers)
+
+sendm <- brm(Ein ~ event_send,
+             cores = noOfCores,
+             family = negbinomial,
+             data = passengers)
+
+hour_weekdaym <- brm(Ein ~ poly(hour, 3) * weekday,
+                     cores = noOfCores,
+                     family = negbinomial,
                      data = passengers)
 
-weekday_poisson <- brm(Ein ~ weekday,
-                    cores = noOfCores,
-                    family = poisson,
-                     data = passengers)
+hour_weekday_sendm <- brm(Ein ~ poly(hour, 3) * weekday * event_send,
+                          cores = noOfCores,
+                          family = negbinomial,
+                          data = passengers)
 
-hour_negbinomial <- brm(Ein ~ hour,
-                    cores = noOfCores,
-                    family = negbinomial,
-                     data = passengers)
+weekday_month_rushm <- brm(Ein ~ weekday * month,
+                           cores = noOfCores,
+                           family = negbinomial,
+                           data = passengers[passengers$rush_hour == TRUE,])
 
-hour_poisson <- brm(Ein ~ hour,
-                    cores = noOfCores,
-                    family = poisson,
-                     data = passengers)
+hour_weekday_month_sendm <- brm(Ein ~ poly(hour, 3) * weekday * month * event_send,
+                                cores = noOfCores,
+                                family = negbinomial,
+                                data = passengers)
 
-month_negbinomial <- brm(Ein ~ month,
-                    cores = noOfCores,
-                    family = negbinomial,
-                     data = passengers)
+save(weekdaym, file = "weekday.RData")
+save(weekday_rushm, file = "weekday_rush.RData")
+save(hourm, file = "hourl.RData")
+save(monthm, file = "month.RData")
+save(sendm, file = "send.RData")
+save(hour_weekdaym, file = "hour_weekday.RData")
+save(hour_weekday_sendm, file = "hour_weekday_send.RData")
+save(weekday_month_rushm, file = "weekday_month_rush.RData")
+save(hour_weekday_month_sendm, file = "hour_weekday_month_send.RData")
 
-month_poisson <- brm(Ein ~ month,
-                    cores = noOfCores,
-                    family = poisson,
-                     data = passengers)
+#####
+## pick the model you are interested in
+m = weekday_month_rushm
 
-hour_weekday_negbinomial <- brm(Ein ~ hour * weekday,
-                    cores = noOfCores,
-                    family = negbinomial,
-                     data = passengers)
-
-hour_weekday_poisson <- brm(Ein ~ hour * weekday,
-                    cores = noOfCores,
-                    family = poisson,
-                     data = passengers)
-
-save(weekday_negbinomial, file = "weekday_negbinomial.RData")
-save(weekday_poisson, file = "weekday_poisson.RData")
-save(hour_negbinomial, file = "hour_negbinomial.RData")
-save(hour_poisson, file = "hour_poisson.RData")
-save(month_negbinomial, file = "month_negbinomial.RData")
-save(month_poisson, file = "month_poisson.RData")
-save(hour_weekday_negbinomial, file = "hour_weekday_negbinomial.RData")
-save(hour_weekday_poisson, file = "hour_weekday_poisson.RData")
+# plots
+pp_check(m)
+plot(marginal_effects(m), points = F)
+plot(marginal_effects(m), points = T, point_args = list(alpha = 0.025, width = 0.25, height = 0.25))
 
 ######## goodness-of-fit measures
 # loo, leave-one-out criterion, see loo package
 # lower LOO is better,
-loo(weekday_negbinomial)
-loo(weekday_poisson)
-loo(hour_negbinomial)
-loo(hour_poisson)
-loo(month_negbinomial)
-loo(month_poisson)
-loo(hour_weekday_negbinomial)
-loo(hour_weekday_poisson)
-# negbinomial is better (for now)
-
-m = weekday_negbinomial
-
-plot(marginal_effects(m), points = T, point_args = list(alpha = 0.025, width = 0.25, height = 0.25))
+# negbinomial is better (poisson models were tested bud deleted from this file due to a cleaner code)
+loo(m)
