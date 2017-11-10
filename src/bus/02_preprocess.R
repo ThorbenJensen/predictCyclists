@@ -8,6 +8,9 @@ df <- read.csv("data/processed/bus.csv")
 bank_holidays <- 
   read.csv("data/raw/holidays/feiertage151617.csv") %>%
   mutate(date = as.Date(date))
+event_send <- 
+  read.csv("data/raw/events/event_send.csv") %>%
+  mutate(date = as.Date(date))
 
 # time features: month, weekday, weekend
 df2 <- 
@@ -28,7 +31,10 @@ df2 <-
   mutate(bank_holiday = as.logical(bank_holiday)) %>%
   # rush hour
   mutate(rush_hour = ifelse((weekend == F & hour > 6 & hour < 10), 
-                            T, F))
+                            T, F)) %>%
+  # event: send
+  left_join(., event_send, by = 'date') %>%
+  mutate(event_send = ifelse(event_send == 1, T, F))
 
 # weather features: temp, rain, wind
 # TODO

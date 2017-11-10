@@ -23,3 +23,6 @@ ggplot(df, aes(timestamp)) +
   geom_histogram(binwidth = 60*60*24) +
   scale_x_datetime(limits = c(as.POSIXct("2017-08-01"), 
                               as.POSIXct("2017-11-15")))
+
+# histogram of 'Ein'
+# TODO
