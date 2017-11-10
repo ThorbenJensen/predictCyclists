@@ -15,6 +15,9 @@ raw.result <- fromJSON("https://services.arcgis.com//OLiydejKCZTGhvWg//ArcGIS//r
 
 
 ui <- fluidPage(
+  
+  tags$link(rel = "stylesheet", type = "text/css", href = "styling.css"),
+  
   tags$style(type="text/css", "#mymap, #mymap2 { height: calc(100vh - 80px); padding: 50px; margin-bottom: 20px;}"),
   leafletOutput("mymap"),
   leafletOutput("mymap2"),
@@ -60,7 +63,8 @@ server <- function(input, output, session) {
                                                "font-family" = "serif",
                                                "font-style" = "italic",
                                                "box-shadow" = "3px 3px rgba(0,0,0,0.25)",
-                                              "font-size" = "12px"
+                                              "font-size" = "12px",
+                                              "text-align" = "center"
                                              ))) %>%
       setView(7.62571, 51.96236, 13,5)
   })
