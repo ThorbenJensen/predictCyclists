@@ -25,9 +25,15 @@ ggplot(df, aes(timestamp)) +
                               as.POSIXct("2017-11-15")))
 
 # histogram of 'Ein' and 'Aus'
-p <- ggplot(data = df) +
+morning = subset(df, c(hour > 4, hour < 10))
+afternoon = subset(df, c(hour > 15, hour < 21))
+
+p <- ggplot(data = afternoon) +
   geom_histogram(aes(x = Ein, fill = "Ein"), alpha = 0.25, binwidth = 1) + 
   geom_histogram(aes(x = Aus, fill = "Aus"), alpha = 0.25, binwidth = 1)
 p
 
+p <- ggplot(data = df) +
+  geom_histogram(aes(x = hour, fill = "stunde"), alpha = 0.25, binwidth = 1)
+p
 # TODO

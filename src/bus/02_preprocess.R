@@ -3,6 +3,10 @@
 library(dplyr)
 library(lubridate)
 
+# TODO
+
+# check for more than one row for only a single bus stop -> we only want one row
+
 # LOAD DATA
 df <- read.csv("data/processed/bus.csv")
 bank_holidays <- 
