@@ -12,20 +12,23 @@ bank_holidays <-
 # time features: month, weekday, weekend
 df2 <- 
   df %>%
+  # date related features
   mutate(date = as.Date(Datum, format = "%d.%m.%Y")) %>%
   mutate(weekday = wday(date, abbr = F, label = T)) %>%
   mutate(weekend = (weekday %in% c('Saturday', 'Sunday'))) %>%
   mutate(month = month(date)) %>%
   mutate(year = year(date)) %>%
+  # time related features
   mutate(date_time = paste(date, Zeit)) %>%
   mutate(timestamp = as.POSIXct(date_time, format = "%Y-%m-%d %H:%M:%S")) %>%
   mutate(hour = hour(timestamp)) %>%
+  # adding bank holidays
   left_join(., bank_holidays, by = 'date') %>%
-  mutate(bank_holiday = ifelse(is.na(bank_holiday), 0, bank_holiday))
-
-# TODO
-
-# TODO: join holidays, rush_hour
+  mutate(bank_holiday = ifelse(is.na(bank_holiday), 0, bank_holiday)) %>%
+  mutate(bank_holiday = as.logical(bank_holiday)) %>%
+  # rush hour
+  mutate(rush_hour = ifelse((weekend == F & hour > 6 & hour < 10), 
+                            T, F))
 
 # weather features: temp, rain, wind
 # TODO
