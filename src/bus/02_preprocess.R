@@ -2,7 +2,6 @@
 
 library(dplyr)
 library(lubridate)
-library(sqldf)
 
 # LOAD DATA
 df <- read.csv("data/processed/bus.csv")
