@@ -16,8 +16,8 @@ df2 <-
   mutate(date = as.Date(Datum, format = "%d.%m.%Y")) %>%
   mutate(weekday = wday(date, abbr = F, label = T)) %>%
   mutate(weekend = (weekday %in% c('Saturday', 'Sunday'))) %>%
-  mutate(month = month(date)) %>%
-  mutate(year = year(date)) %>%
+  mutate(month = as.character(month(date))) %>%
+  mutate(year = as.character(year(date))) %>%
   # time related features
   mutate(date_time = paste(date, Zeit)) %>%
   mutate(timestamp = as.POSIXct(date_time, format = "%Y-%m-%d %H:%M:%S")) %>%
