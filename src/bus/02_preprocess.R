@@ -10,7 +10,7 @@ df <- read.csv("data/processed/bus.csv")
 # TODO
 
 # time features: month, weekday, weekend
-df <- 
+df2 <- 
   df %>%
   mutate(date = as.Date(Datum, format = "%d.%m.%y")) %>%
   mutate(weekday = wday(date, abbr = F, label = T)) %>%
@@ -23,4 +23,10 @@ df <-
 # events: sendt, carneval, ...
 # TODO
 
+# remove deprecated columns from data.frame
+df2 <-
+  df2 %>%
+  select(-Datum)
+
 # SAVE DATA
+write.csv(df2, "data/processed/bus2.csv")
