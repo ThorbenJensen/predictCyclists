@@ -24,5 +24,10 @@ ggplot(df, aes(timestamp)) +
   scale_x_datetime(limits = c(as.POSIXct("2017-08-01"), 
                               as.POSIXct("2017-11-15")))
 
-# histogram of 'Ein'
+# histogram of 'Ein' and 'Aus'
+p <- ggplot(data = df) +
+  geom_histogram(aes(x = Ein, fill = "Ein"), alpha = 0.25, binwidth = 1) + 
+  geom_histogram(aes(x = Aus, fill = "Aus"), alpha = 0.25, binwidth = 1)
+p
+
 # TODO
