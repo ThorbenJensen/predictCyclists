@@ -21,7 +21,7 @@ df2 <-
   df %>%
   # date related features
   mutate(date = as.Date(Datum, format = "%d.%m.%Y")) %>%
-  mutate(weekday = wday(date, abbr = F, label = T)) %>%
+  mutate(weekday = wday(date, abbr = F, label = T, locale = "en_US.UTF-8")) %>%
   mutate(weekend = (weekday %in% c('Saturday', 'Sunday'))) %>%
   mutate(month = as.character(lubridate::month(date))) %>%
   mutate(year = as.character(lubridate::year(date))) %>%
