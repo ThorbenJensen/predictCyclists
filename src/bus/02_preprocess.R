@@ -46,7 +46,7 @@ df2 <-
 # remove deprecated columns from data.frame
 df2 <-
   df2 %>%
-  select(-Datum)
+  dplyr::select(-Datum)
 
 # SAVE DATA
 write.csv(df2, "data/processed/bus2.csv")
