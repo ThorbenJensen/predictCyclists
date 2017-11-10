@@ -10,7 +10,7 @@ passengers$month = as.factor(passengers$month)
 # ordered factors don't survive .csv storing, so, re-order weekdays:
 passengers$weekday = factor(passengers$weekday, 
                             ordered = TRUE,
-                            levels = c("Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"))
+                            levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
 
 
 noOfCores <- parallel::detectCores()
