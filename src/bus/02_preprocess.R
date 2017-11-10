@@ -30,7 +30,7 @@ df2 <-
   mutate(bank_holiday = ifelse(is.na(bank_holiday), 0, bank_holiday)) %>%
   mutate(bank_holiday = as.logical(bank_holiday)) %>%
   # rush hour
-  mutate(rush_hour = ifelse((weekend == F & hour > 6 & hour < 10), 
+  mutate(rush_hour = ifelse((weekend == F & bank_holiday == F & hour > 6 & hour < 10), 
                             T, F)) %>%
   # event: send
   left_join(., event_send, by = 'date') %>%
