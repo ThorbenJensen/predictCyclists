@@ -17,6 +17,7 @@ ggplot(df, aes(timestamp, Ein)) +
   geom_line()
 
 # time line, aggregated by hour
-# TODO
-ggplot(df, aes(timestamp, Ein)) +
-  geom_line()
+ggplot(df, aes(timestamp)) +
+  geom_histogram(binwidth = 60*60*24) +
+  scale_x_datetime(limits = c(as.POSIXct("2017-08-01"), 
+                              as.POSIXct("2017-11-15")))
