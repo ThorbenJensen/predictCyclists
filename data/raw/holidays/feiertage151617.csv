@@ -1,0 +1,35 @@
+date,name_bank_holiday,bank_holiday
+2017-01-01,Neujahr,1
+2017-04-14,Karfreitag,1
+2017-04-17,Ostermontag,1
+2017-05-01,Maifeiertag,1
+2017-05-25,Christi Himmelfahrt,1
+2017-06-05,Pfingstmontag,1
+2017-06-15,Fronleichnam,1
+2017-10-03,Tag der Deutschen Einheit,1
+2017-10-31,Reformationstag,1
+2017-11-01,Allerheiligen,1
+2017-12-25,1. Weihnachtstag,1
+2017-12-26,2. Weihnachtstag,1
+2016-01-01,Neujahr,1
+2016-03-25,Karfreitag,1
+2016-03-28,Ostermontag,1
+2016-05-01,Maifeiertag,1
+2016-05-05,Christi Himmelfahrt,1
+2016-05-16,Pfingstmontag,1
+2016-05-26,Fronleichnam,1
+2016-10-03,Tag der Deutschen Einheit,1
+2016-11-01,Allerheiligen,1
+2016-12-25,1. Weihnachtstag,1
+2016-12-26,2. Weihnachtstag,1
+2015-01-01,Neujahr,1
+2015-04-03,Karfreitag,1
+2015-04-06,Ostermontag,1
+2015-05-01,Maifeiertag,1
+2015-05-14,Christi Himmelfahrt,1
+2015-05-25,Pfingstmontag,1
+2015-06-04,Fronleichnam,1
+2015-10-03,Tag der Deutschen Einheit,1
+2015-11-01,Allerheiligen,1
+2015-12-25,1. Weihnachtstag,1
+2015-12-26,2. Weihnachtstag,1

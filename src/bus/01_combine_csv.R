@@ -29,7 +29,7 @@ for (file in files) {
   colnames(df) <- colnames(df)[-1]
   
   # select and filter
-  # Datum, Zeit, Ein, Aus, HstCode, HstName, Wagen, X, Y
+  # Linie, Datum, Zeit, Ein, Aus, HstCode, HstName, Wagen, X, Y
   df <-
     df %>% 
     select(Linie, Datum, Zeit, Ein, Aus, HstCode, HstName, Wagen, X, Y) %>%
