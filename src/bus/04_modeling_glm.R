@@ -3,6 +3,7 @@
 library(dplyr)
 library(glm)
 library(MASS)
+library(boot)
 
 # LOAD DATA
 df <- 
@@ -11,9 +12,15 @@ df <-
   mutate(hour = as.factor(hour))
 
 # train model
-fit <- glm.nb(Ein 
-              ~ month + weekday + weekend + hour + event_send + bank_holiday),
-              data = df)
-fit
+model <- glm.nb(Ein 
+                ~ month + weekday + month + weekend
+                + bank_holiday 
+                + event_send 
+                # + rush_hour
+                ,
+                data = df)
 
-# measure RMSE and MAPE
+# measure MSE
+mse <- cv.glm(df, model, K = 7)$delta
+mse
+sqrt(mse)
