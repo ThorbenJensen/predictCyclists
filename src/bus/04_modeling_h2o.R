@@ -1,9 +1,19 @@
 # TRAIN MODELS, MEASURE ACCURACY
 
+library(dplyr)
 library(h2o)
-h2o.init(nthreads = -1, max_mem_size = "2G")
+
+# CONNECT TO H2O
+h2o.init()
 
 # LOAD DATA
-df <- read.csv("data/processed/bus2.csv")
+df <- 
+  read.csv("data/processed/bus2.csv")
 
-# START H2O
+
+# import to h2o
+df2 <- as.h2o(df)
+result <- h2o.randomForest(training_frame = df2, 
+                           x = c("weekday", "weekend", "month", "hour"),
+                           y = "Ein")
+summary(result)
