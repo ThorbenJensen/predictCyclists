@@ -32,12 +32,12 @@ for (file in files) {
   # Datum, Zeit, Ein, Aus, HstCode, HstName, Wagen, X, Y
   df <-
     df %>% 
-    select(Datum, Zeit, Ein, Aus, HstCode, HstName, Wagen, X, Y) %>%
+    select(Linie, Datum, Zeit, Ein, Aus, HstCode, HstName, Wagen, X, Y) %>%
     filter(HstName == "Sophienstraße") %>%
     filter(complete.cases(.))
-    
+
   target <- rbind(target, df)
   i <- i + 1
 }
 
-write.csv(target, "data/processed/bus.csv")
+write.csv(target, "data/processed/bus2.csv")
