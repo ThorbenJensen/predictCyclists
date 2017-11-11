@@ -20,7 +20,7 @@ model <- glm.nb(Ein
                 ,
                 data = df)
 
-# measure MSE
+# measure RMSE
 mse <- cv.glm(df, model, K = 7)$delta
 mse
 sqrt(mse)
