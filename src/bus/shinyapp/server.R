@@ -16,6 +16,7 @@ library(lubridate)
 #Plot Data
 library(dplyr)
 library(ggplot2)
+library(brms)
 
 #LOAD DATA FROM WEBSERVICE
 options(stringsAsFactors = FALSE)
@@ -31,6 +32,10 @@ hstID = "43901"
 df <- 
   read.csv(paste0("../../../data/processed/all_" , hstID,  ".csv")) #%>%
   #mutate(timestamp = as.POSIXct(timestamp))
+
+#data for hour and weekday plots
+load("../../../results/hourhbf.RData")
+load("../../../results/weekdayhbf.RData")
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
@@ -119,5 +124,23 @@ shinyServer(function(input, output, session) {
       labs(title = "Ein- und Ausstiege", x = "Anzahl Ein- / Ausstiege", y = "Häufigkeit im Zeitraum", fill = "Legende") +
       theme_light()
     
+  })
+  
+  output$hourPlot <- renderPlot({
+    plot(marginal_effects(hourm), points = F, plot = F)[[1]] + 
+      labs(title = "Tagesverlauf Einstiege, Hbf, März 2017, Modellvorhersage", x = "Stunde", y = "Einstiege") + 
+      scale_x_continuous(breaks = 7:22) + 
+      coord_cartesian(ylim = 0:18) +
+      scale_y_continuous(breaks = seq(0, 18, by = 2)) + 
+      theme_light() # change to whatever looks best
+  })
+  
+  output$weekdayPlot <- renderPlot({
+    plot(marginal_effects(weekdaym), points = F, plot = F)[[1]] + 
+      labs(title = "Wochenverlauf Einstiege, Hbf, März 2017, Modellvorhersage", x = "Stunde", y = "Einstiege") + 
+      # scale_x_continuous(breaks = 7:22) + 
+      coord_cartesian(ylim = 0:18) +
+      scale_y_continuous(breaks = seq(0, 18, by = 2)) + 
+      theme_light() # change to whatever looks best
   })
 })
