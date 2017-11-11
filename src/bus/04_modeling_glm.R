@@ -24,3 +24,6 @@ model <- glm.nb(Ein
 mse <- cv.glm(df, model, K = 7)$delta
 mse
 sqrt(mse)
+
+# forecasting
+# TODO
