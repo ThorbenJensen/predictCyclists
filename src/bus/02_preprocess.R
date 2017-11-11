@@ -4,7 +4,6 @@ library(dplyr)
 library(lubridate)
 
 # TODO
-
 # check for more than one row for only a single bus stop -> we only want one row
 
 hstID = "43901" # sophienstrasse 
@@ -49,7 +48,7 @@ df2 <-
 # weather features: temp, rain, wind
 # TODO
 
-# events: sendt, carneval, ...
+# events: carneval, ...
 # TODO
 
 # remove deprecated columns from data.frame

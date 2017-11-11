@@ -2,7 +2,6 @@
 
 library(dplyr)
 
-
 files <- dir("data/raw/bus/Aktuell/", full.names = T)
 
 target <- data.frame(Datum = character(),
