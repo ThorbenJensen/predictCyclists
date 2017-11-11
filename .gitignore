@@ -9,3 +9,4 @@ data/raw/bus/*
 data/processed/bus*
 data/processed/all_43901.csv
 data/processed/all_43901_enhanced.csv
+data/processed/all_41000.csv

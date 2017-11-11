@@ -40,3 +40,6 @@ sjp.glm(model, type = "eff",  vars = c("month"))
 mse <- cv.glm(df, model, K = 7)$delta
 mse
 sqrt(mse)
+
+# forecasting
+# TODO

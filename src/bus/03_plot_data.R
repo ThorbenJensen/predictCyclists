@@ -21,7 +21,7 @@ ggplot(df, aes(timestamp, Ein)) +
 
 # time line, aggregated by hour
 ggplot(df, aes(timestamp)) +
-  geom_histogram(binwidth = 60*60*24) #+
+  geom_histogram(binwidth = 60*60*24)
 
 # histogram of 'Ein' and 'Aus' -> shiny top right
 df %>%
