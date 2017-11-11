@@ -12,7 +12,8 @@ hstID = "43901" # sophienstrasse
 
 # LOAD DATA
 # TODO save in UTF-8
-df <- read.csv(paste0("data/processed/all_" , hstID,  ".csv"), fileEncoding = "ISO-8859-1")
+df <- read.csv(paste0("data/processed/all_" , hstID,  ".csv"),
+               fileEncoding = "ISO-8859-1")
 bank_holidays <- 
   read.csv("data/raw/holidays/feiertage151617.csv") %>%
   mutate(date = as.Date(date))

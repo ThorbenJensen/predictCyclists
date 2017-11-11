@@ -7,3 +7,5 @@ data/raw/kfz-data/*
 data/database/*
 data/raw/bus/*
 data/processed/bus*
+data/processed/all_43901.csv
+data/processed/all_43901_enhanced.csv
