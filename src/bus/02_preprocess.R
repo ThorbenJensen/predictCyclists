@@ -7,11 +7,12 @@ library(lubridate)
 
 # check for more than one row for only a single bus stop -> we only want one row
 
-hst = "sophienstrasse" 
+hstID = "43901" # sophienstrasse 
 # TODO create more haltestellen csvs
 
 # LOAD DATA
-df <- read.csv(paste0("data/processed/", hst,  ".csv"), fileEncoding = "ISO-8859-1")
+# TODO save in UTF-8
+df <- read.csv(paste0("data/processed/all_" , hstID,  ".csv"), fileEncoding = "ISO-8859-1")
 bank_holidays <- 
   read.csv("data/raw/holidays/feiertage151617.csv") %>%
   mutate(date = as.Date(date))
@@ -56,4 +57,4 @@ df2 <-
   dplyr::select(-DatumAn)
 
 # SAVE DATA
-write.csv(df2, paste0("data/processed/", hst, "_enhanced.csv"))
+write.csv(df2, paste0("data/processed/all_", hstID, "_enhanced.csv"))
