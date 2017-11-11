@@ -5,7 +5,8 @@
 library(brms)
 library(boot)
 
-hstID = "43901" # sophienstraße
+#hstID = "43901" # sophienstraße
+hstID = "41000" # hauptbahnhof
 
 # load data
 passengers = read.csv(paste0("data/processed/all_", hstID, "_enhanced.csv"))

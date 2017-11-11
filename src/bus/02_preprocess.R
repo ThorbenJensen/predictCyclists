@@ -6,8 +6,8 @@ library(lubridate)
 # TODO
 # check for more than one row for only a single bus stop -> we only want one row
 
-# hstID = "43901" # sophienstrasse 
-hstID = "41000" # hauptbahnhod
+#hstID = "43901" # sophienstrasse 
+hstID = "41000" # hauptbahnhof 
 # TODO create more haltestellen csvs
 
 # LOAD DATA
