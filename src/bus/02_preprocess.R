@@ -20,9 +20,14 @@ event_send <-
   read.csv("data/raw/events/event_send.csv") %>%
   mutate(date = as.Date(date))
 
+# remove "Ein" outliers (we are generous: more than 10 * SD):
+df_no_outlier <-
+  df %>%
+  filter(Ein <= 10*sd(Ein))
+
 # time features: month, weekday, weekend
 df2 <- 
-  df %>%
+  df_no_outlier %>%
   # date related features
   mutate(date = as.Date(DatumAn, format = "%d.%m.%Y")) %>%
   mutate(weekday = wday(date, abbr = F, label = T, locale = "en_US.UTF-8")) %>%
