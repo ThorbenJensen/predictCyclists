@@ -3,9 +3,12 @@
 # TODO
 # center predictors? 
 library(brms)
+library(boot)
+
+hstID = "43901" # sophienstraße
 
 # load data
-passengers = read.csv("data/processed/bus2.csv")
+passengers = read.csv(paste0("data/processed/all_", hstID, "_enhanced.csv"))
 passengers$month = as.factor(passengers$month)
 # ordered factors don't survive .csv storing, so, re-order weekdays:
 passengers$weekday = factor(passengers$weekday, 
@@ -40,10 +43,10 @@ sendm <- brm(Ein ~ event_send,
              family = negbinomial,
              data = passengers)
 
-hour_weekdaym <- brm(Ein ~ poly(hour, 3) * weekday,
+hour_weekdaym <- brm(Ein ~ poly(hour, 3) + weekday,
                      cores = noOfCores,
                      family = negbinomial,
-                     data = passengers)
+                     data = passengers[!is.na(passengers$hour),])
 
 hour_weekday_sendm <- brm(Ein ~ poly(hour, 3) * weekday * event_send,
                           cores = noOfCores,
@@ -55,6 +58,11 @@ weekday_month_rushm <- brm(Ein ~ weekday * month,
                            family = negbinomial,
                            data = passengers[passengers$rush_hour == TRUE,])
 
+hour_weekday_monthm <- brm(Ein ~ poly(hour, 3) + weekday + month,
+                                cores = noOfCores,
+                                family = negbinomial,
+                                data = passengers[!is.na(passengers$hour),])
+
 hour_weekday_month_sendm <- brm(Ein ~ poly(hour, 3) * weekday * month * event_send,
                                 cores = noOfCores,
                                 family = negbinomial,
@@ -62,7 +70,7 @@ hour_weekday_month_sendm <- brm(Ein ~ poly(hour, 3) * weekday * month * event_se
 
 save(weekdaym, file = "weekday.RData")
 save(weekday_rushm, file = "weekday_rush.RData")
-save(hourm, file = "hourl.RData")
+save(hourm, file = "hour.RData")
 save(monthm, file = "month.RData")
 save(sendm, file = "send.RData")
 save(hour_weekdaym, file = "hour_weekday.RData")
@@ -72,7 +80,7 @@ save(hour_weekday_month_sendm, file = "hour_weekday_month_send.RData")
 
 #####
 ## pick the model you are interested in
-m = weekday_month_rushm
+m = hour_weekday_month
 
 # plots
 pp_check(m)
@@ -84,3 +92,7 @@ plot(marginal_effects(m), points = T, point_args = list(alpha = 0.025, width = 0
 # lower LOO is better,
 # negbinomial is better (poisson models were tested bud deleted from this file due to a cleaner code)
 loo(m)
+# measure RMSE
+mse <- cv.glm(df, m, K = 7)$delta
+mse
+sqrt(mse)
