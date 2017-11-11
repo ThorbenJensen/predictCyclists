@@ -22,13 +22,15 @@ ggplot(df, aes(timestamp, Ein)) +
 ggplot(df, aes(timestamp)) +
   geom_histogram(binwidth = 60*60*24) #+
 
-# histogram of 'Ein' and 'Aus'
+# histogram of 'Ein' and 'Aus' -> shiny overview top right
 df %>%
   filter(hour > 4 & hour < 10) %>% # morning
   # filter(hour > 15 & hour < 21) %>% # afternoon
   ggplot(data = .) +
-    geom_histogram(aes(x = Ein, fill = "Ein"), alpha = 0.25, binwidth = 1) + 
-    geom_histogram(aes(x = Aus, fill = "Aus"), alpha = 0.25, binwidth = 1)
+    geom_histogram(position = "dodge", aes(x = Ein, fill = "Einstiege"), alpha = 0.75, binwidth = 1) + 
+    geom_histogram(position = "dodge", aes(x = Aus, fill = "Ausstiege"), alpha = 0.75, binwidth = 1) +
+  labs(title = "Ein- und Ausstiege", x = "Anzahl Ein- / Ausstiege", y = "Häufigkeit im Zeitraum", fill = "Legende") +
+  theme_light() # change to whatever looks best
 
 
 ggplot(data = df) +
