@@ -6,7 +6,8 @@ library(lubridate)
 # TODO
 # check for more than one row for only a single bus stop -> we only want one row
 
-hstID = "43901" # sophienstrasse 
+# hstID = "43901" # sophienstrasse 
+hstID = "41000" # hauptbahnhod
 # TODO create more haltestellen csvs
 
 # LOAD DATA
@@ -18,6 +19,9 @@ bank_holidays <-
   mutate(date = as.Date(date))
 event_send <- 
   read.csv("data/raw/events/event_send.csv") %>%
+  mutate(date = as.Date(date))
+weather <- 
+  read.csv("data/raw/bus/weather.csv") %>%
   mutate(date = as.Date(date))
 
 # remove "Ein" outliers (we are generous: more than 10 * SD):
@@ -38,6 +42,7 @@ df2 <-
   mutate(date_time = paste(date, ZeitAn)) %>%
   mutate(timestamp = as.POSIXct(date_time, format = "%Y-%m-%d %H:%M:%S")) %>%
   mutate(hour = lubridate::hour(timestamp)) %>%
+  mutate(minute = lubridate::minute(timestamp)) %>%
   # adding bank holidays
   left_join(., bank_holidays, by = 'date') %>%
   mutate(bank_holiday = ifelse(is.na(bank_holiday), 0, bank_holiday)) %>%
@@ -48,7 +53,9 @@ df2 <-
                             T, F)) %>%
   # event: send
   left_join(., event_send, by = 'date') %>%
-  mutate(event_send = ifelse(event_send == 1, T, F))
+  mutate(event_send = ifelse(event_send == 1, T, F)) %>%
+  # add weather
+  left_join(., weather, by = c('date', 'hour'))
 
 # weather features: temp, rain, wind
 # TODO

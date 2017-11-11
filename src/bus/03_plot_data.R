@@ -4,7 +4,8 @@ library(dplyr)
 library(ggplot2)
 
 # LOAD DATA
-hstID = "43901"
+# hstID <- "43901" # sophienstra
+hstID <- "41000" # hauptbahnhof
 df <- 
   read.csv(paste0("data/processed/all_" , hstID,  "_enhanced.csv")) %>%
   mutate(timestamp = as.POSIXct(timestamp))
@@ -27,9 +28,13 @@ df %>%
   filter(hour > 4 & hour < 10) %>% # morning
   # filter(hour > 15 & hour < 21) %>% # afternoon
   ggplot(data = .) +
-    geom_histogram(position = "dodge", aes(x = Ein, fill = "Einstiege"), alpha = 0.75, binwidth = 1) + 
-    geom_histogram(position = "dodge", aes(x = Aus, fill = "Ausstiege"), alpha = 0.75, binwidth = 1) +
-  labs(title = "Ein- und Ausstiege", x = "Anzahl Ein- / Ausstiege", y = "Häufigkeit im Zeitraum", fill = "Legende") +
+    geom_histogram(position = "dodge", aes(x = Ein, fill = "Einstiege"), 
+                   alpha = 0.75, binwidth = 1) + 
+    geom_histogram(position = "dodge", aes(x = Aus, fill = "Ausstiege"), 
+                   alpha = 0.75, binwidth = 1) +
+  labs(title = "Ein- und Ausstiege", 
+       x = "Anzahl Ein- / Ausstiege", 
+       y = "Häufigkeit im Zeitraum", fill = "Legende") +
   theme_light() # change to whatever looks best
 
 
