@@ -7,8 +7,11 @@ library(lubridate)
 
 # check for more than one row for only a single bus stop -> we only want one row
 
+hst = "sophienstrasse" 
+# TODO create more haltestellen csvs
+
 # LOAD DATA
-df <- read.csv("data/processed/bus.csv")
+df <- read.csv(paste0("data/processed/", hst,  ".csv"), fileEncoding = "ISO-8859-1")
 bank_holidays <- 
   read.csv("data/raw/holidays/feiertage151617.csv") %>%
   mutate(date = as.Date(date))
@@ -20,13 +23,13 @@ event_send <-
 df2 <- 
   df %>%
   # date related features
-  mutate(date = as.Date(Datum, format = "%d.%m.%Y")) %>%
+  mutate(date = as.Date(DatumAn, format = "%d.%m.%Y")) %>%
   mutate(weekday = wday(date, abbr = F, label = T, locale = "en_US.UTF-8")) %>%
   mutate(weekend = (weekday %in% c('Saturday', 'Sunday'))) %>%
   mutate(month = as.character(lubridate::month(date))) %>%
   mutate(year = as.character(lubridate::year(date))) %>%
   # time related features
-  mutate(date_time = paste(date, Zeit)) %>%
+  mutate(date_time = paste(date, ZeitAn)) %>%
   mutate(timestamp = as.POSIXct(date_time, format = "%Y-%m-%d %H:%M:%S")) %>%
   mutate(hour = lubridate::hour(timestamp)) %>%
   # adding bank holidays
@@ -50,7 +53,7 @@ df2 <-
 # remove deprecated columns from data.frame
 df2 <-
   df2 %>%
-  dplyr::select(-Datum)
+  dplyr::select(-DatumAn)
 
 # SAVE DATA
-write.csv(df2, "data/processed/bus2.csv")
+write.csv(df2, paste0("data/processed/", hst, "_enhanced.csv"))
