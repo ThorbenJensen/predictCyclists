@@ -58,11 +58,11 @@ shinyUI(dashboardPage(skin="black",
                     plotOutput(outputId = "auslastungPlot")
                   ),
                   box(
-                    title = "Hauptbahnhof, Tagesverlauf, März 2017", width = 12, solidHeader = TRUE,
+                    title = "Hauptbahnhof, Tagesverlauf Einstiege, März 2017, Modellverlauf", width = 12, solidHeader = TRUE,
                     plotOutput(outputId = "hourPlot")
                   ),
                   box(
-                    title = "Hauptbahnhof, Wochenverlauf, März 2017", width = 12, solidHeader = TRUE,
+                    title = "Hauptbahnhof, Wochenverlauf Einstiege, März 2017, Modellverlauf", width = 12, solidHeader = TRUE,
                     plotOutput(outputId = "weekdayPlot")
                   )
                 ),

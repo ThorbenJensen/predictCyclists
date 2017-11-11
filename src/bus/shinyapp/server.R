@@ -128,19 +128,19 @@ shinyServer(function(input, output, session) {
   
   output$hourPlot <- renderPlot({
     plot(marginal_effects(hourm), points = F, plot = F)[[1]] + 
-      labs(title = "Tagesverlauf Einstiege, Hbf, März 2017, Modellvorhersage", x = "Stunde", y = "Einstiege") + 
+      labs(title = "", x = "Stunde", y = "Einstiege") + 
       scale_x_continuous(breaks = 7:22) + 
       coord_cartesian(ylim = 0:18) +
       scale_y_continuous(breaks = seq(0, 18, by = 2)) + 
-      theme_light() # change to whatever looks best
+      theme_light(base_size = 16) # change to whatever looks best
   })
   
   output$weekdayPlot <- renderPlot({
     plot(marginal_effects(weekdaym), points = F, plot = F)[[1]] + 
-      labs(title = "Wochenverlauf Einstiege, Hbf, März 2017, Modellvorhersage", x = "Stunde", y = "Einstiege") + 
+      labs(title = "", x = "Wochentag", y = "Einstiege") + 
       # scale_x_continuous(breaks = 7:22) + 
       coord_cartesian(ylim = 0:18) +
       scale_y_continuous(breaks = seq(0, 18, by = 2)) + 
-      theme_light() # change to whatever looks best
+      theme_light(base_size = 16) # change to whatever looks best
   })
 })
