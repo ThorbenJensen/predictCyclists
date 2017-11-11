@@ -13,9 +13,24 @@ library(httr)
 library(jsonlite)
 library(lubridate)
 
+#Plot Data
+library(dplyr)
+library(ggplot2)
+
+#LOAD DATA FROM WEBSERVICE
 options(stringsAsFactors = FALSE)
 
 raw.result <- fromJSON("https://services.arcgis.com//OLiydejKCZTGhvWg//ArcGIS//rest//services//Stadtwerke_MS_GTFS_Data_WFL1//FeatureServer//0//query?where=ObjectID%3E%3D0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnDistinctValues=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson&token=")
+
+# Auslastungsdata
+
+#LOAD DATA Ein and Ausstiege
+hstID = "43901"
+
+# Data for the Auslastung Plot
+df <- 
+  read.csv(paste0("../../../data/processed/all_" , hstID,  ".csv")) #%>%
+  #mutate(timestamp = as.POSIXct(timestamp))
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
@@ -27,8 +42,10 @@ shinyServer(function(input, output, session) {
   random_points <- eventReactive(input$recalc, {
     cbind(rnorm(40, sd = 0.15) + 7.62571, rnorm(40, sd = 0.15) + 51.96236)
   })
+  
   stop_names <- eventReactive(input$recals, {
     raw.result[6]$features$attributes$stop_name}, ignoreNULL = FALSE)
+  
   
   output$mymap <- renderLeaflet({
     #First Layer with bus stops and circles with random radiuses
@@ -61,4 +78,46 @@ shinyServer(function(input, output, session) {
       setView(7.62571, 51.96236, 13,5)
   })
   
+  output$abschoepfungBox <- renderValueBox({
+    infoBox(
+      "Voraussichtliche Abschoepfung", paste0(25), icon = icon("user-o"), color = "orange", fill = TRUE)
+  })
+  
+  output$auslastungBox <- renderValueBox({
+    infoBox(
+      "Voraussichtliche Auslastung", paste0(25), icon = icon("bus"), color = "blue", fill = TRUE)
+  })
+  
+  output$reichweiteBox <- renderValueBox({
+    infoBox(
+      "Taegliche Displayreichweite", paste0(25), icon = icon("eye"), color = "yellow", fill = TRUE)
+  })
+  
+  output$radaufkommenBox <- renderValueBox({
+    infoBox(
+      "Allgemeines Radaufkommen", paste0(25), icon = icon("bicycle"), color = "green", fill = TRUE)
+  })
+  
+  output$einstiegeBox <- renderValueBox({
+    infoBox(
+      "Einstiege", paste0(25), icon = icon("arrow-up"), color = "olive", fill = TRUE)
+  })
+  
+  output$ausstiegeBox <- renderValueBox({
+    infoBox(
+      "Ausstiege", paste0(25), icon = icon("arrow-down"), color = "maroon", fill = TRUE)
+  })
+  
+  output$auslastungPlot <- renderPlot({
+    
+    df %>%
+      #filter(hour > 4 & hour < 10) %>% # morning
+      # filter(hour > 15 & hour < 21) %>% # afternoon
+      ggplot(data = .) +
+      geom_histogram(position = "dodge", aes(x = Ein, fill = "Einstiege"), alpha = 0.75, binwidth = 1) + 
+      geom_histogram(position = "dodge", aes(x = Aus, fill = "Ausstiege"), alpha = 0.75, binwidth = 1) +
+      labs(title = "Ein- und Ausstiege", x = "Anzahl Ein- / Ausstiege", y = "Häufigkeit im Zeitraum", fill = "Legende") +
+      theme_light()
+    
+  })
 })

@@ -1,0 +1,20 @@
+.uhrzeit .form-group {
+  width: 90% !important;
+}
+.datum .form-group {
+  width: 80% !important;
+}
+
+#abschoepfungBox, #auslastungBox, #reichweiteBox, #radaufkommenBox  {
+  width: 80% !important;
+  border-radius: 14px;
+}
+
+#einstiegeBox, #ausstiegeBox {
+  border-radius: 14px;
+    width: 100% !important;
+}
+
+#auslastungPlot {
+  width: 100% !important;
+}
