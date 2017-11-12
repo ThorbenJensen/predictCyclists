@@ -21,7 +21,7 @@ event_send <-
   read.csv("data/raw/events/event_send.csv") %>%
   mutate(date = as.Date(date))
 weather <- 
-  read.csv("data/raw/bus/weather.csv") %>%
+  read.csv("data/raw/weather.csv") %>%
   mutate(date = as.Date(date))
 
 # remove "Ein" outliers (we are generous: more than 10 * SD):
