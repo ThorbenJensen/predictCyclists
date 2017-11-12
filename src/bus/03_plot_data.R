@@ -2,6 +2,7 @@
 
 library(dplyr)
 library(ggplot2)
+library(ggthemes)
 
 # LOAD DATA
 #hstID = "43901" # sophienstraße
@@ -11,8 +12,15 @@ df <-
   mutate(timestamp = as.POSIXct(timestamp))
 
 # check for spatial outliers: scatter plot of X and Y
-ggplot(df, aes(X, Y)) +
-  geom_point(alpha = .2)
+ggplot(df, aes(X, Y, color = Ein)) +
+  geom_point(alpha = .1)
+
+# Show spatial density of passengers entering busses
+ggplot(df, aes(X, Y, z=Ein)) +
+  stat_summary_hex(fun = function(x) sum(x), color="black")+
+  scale_colour_gradient2()+
+  theme_economist()+
+  theme(legend.position="right", legend.title = element_text(size=9))
 
 # time line
 ggplot(df, aes(timestamp, Ein)) +
