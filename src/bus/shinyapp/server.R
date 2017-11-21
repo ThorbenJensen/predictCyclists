@@ -21,17 +21,19 @@ library(brms)
 #LOAD DATA FROM WEBSERVICE
 options(stringsAsFactors = FALSE)
 
-raw.result <- fromJSON("https://services.arcgis.com//OLiydejKCZTGhvWg//ArcGIS//rest//services//Stadtwerke_MS_GTFS_Data_WFL1//FeatureServer//0//query?where=ObjectID%3E%3D0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnDistinctValues=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson&token=")
+# this map does not exist anymore ...
+# raw.result <- fromJSON("https://services.arcgis.com//OLiydejKCZTGhvWg//ArcGIS//rest//services//Stadtwerke_MS_GTFS_Data_WFL1//FeatureServer//0//query?where=ObjectID%3E%3D0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnDistinctValues=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson&token=")
 
 # Auslastungsdata
 
 #LOAD DATA Ein and Ausstiege
-hstID = "43901"
+# hstID = "43901" # sophienstraße
+hstID = "41000" # hbf
 
 # Data for the Auslastung Plot
 df <- 
-  read.csv(paste0("../../../data/processed/all_" , hstID,  ".csv")) #%>%
-  #mutate(timestamp = as.POSIXct(timestamp))
+  read.csv(paste0("../../../data/processed/all_" , hstID,  "_enhanced.csv")) #%>%
+  # mutate(timestamp = as.POSIXct(timestamp))
 
 #data for hour and weekday plots
 load("../../../results/hourhbf.RData")
@@ -40,17 +42,30 @@ load("../../../results/weekdayhbf.RData")
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
    
+  
+  histEin <- eventReactive(input$recalc, {
+    
+  })
+  
   points <- eventReactive(input$recalc, {
-    cbind(as.numeric(raw.result[6]$features$attributes$stop_lon), as.numeric(raw.result[6]$features$attributes$stop_lat))
+    cbind(as.numeric(df$X),
+          as.numeric(df$Y))
   }, ignoreNULL = FALSE)
+  
+  einstiege <- reactive({
+    df %>% 
+      filter(
+        hour > input$uhrzeit1[1] & hour < input$uhrzeit1[2],
+        date > as.POSIXct(input$datum1[1]) & date < as.POSIXct(input$datum1[2])
+      )
+    })
   
   random_points <- eventReactive(input$recalc, {
     cbind(rnorm(40, sd = 0.15) + 7.62571, rnorm(40, sd = 0.15) + 51.96236)
   })
   
-  stop_names <- eventReactive(input$recals, {
-    raw.result[6]$features$attributes$stop_name}, ignoreNULL = FALSE)
-  
+  stop_names <- eventReactive(input$recalc, {
+    df$HSTName}, ignoreNULL = FALSE)
   
   output$mymap <- renderLeaflet({
     #First Layer with bus stops and circles with random radiuses
@@ -59,7 +74,8 @@ shinyServer(function(input, output, session) {
                        options = providerTileOptions(noWrap = FALSE)
       ) %>%
       addCircles(data = points(), weight = 1,
-                 radius = sqrt(rnorm(20, sd = 40) + 8) * 30, popup = stop_names()
+        
+                          radius = sqrt(rnorm(20, sd = 40) + 8) * 30, popup = stop_names()
       ) %>%
       setView(7.62571, 51.96236, 12,5)
   })
@@ -113,18 +129,17 @@ shinyServer(function(input, output, session) {
       "Ausstiege", paste0("42"), icon = icon("arrow-down"), color = "maroon", fill = TRUE)
   })
   
-  # output$auslastungPlot <- renderPlot({
-  #   
-  #   df %>%
-  #     #filter(hour > 4 & hour < 10) %>% # morning
-  #     # filter(hour > 15 & hour < 21) %>% # afternoon
-  #     ggplot(data = .) +
-  #     geom_histogram(position = "dodge", aes(x = Ein, fill = "Einstiege"), alpha = 0.75, binwidth = 1) + 
-  #     geom_histogram(position = "dodge", aes(x = Aus, fill = "Ausstiege"), alpha = 0.75, binwidth = 1) +
-  #     labs(title = "Ein- und Ausstiege", x = "Anzahl Ein- / Ausstiege", y = "Häufigkeit im Zeitraum", fill = "Legende") +
-  #     theme_light()
-  #   
-  # })
+  output$auslastungPlot <- renderPlot({
+      ggplot(data = einstiege()) +
+        geom_histogram(position = "dodge", aes(x = Ein, fill = "Einstiege"), 
+                       alpha = 0.75, binwidth = 1) + 
+        geom_histogram(position = "dodge", aes(x = Aus, fill = "Ausstiege"), 
+                       alpha = 0.75, binwidth = 1) +
+      labs(title = "Ein- und Ausstiege", 
+           x = "Anzahl Ein- / Ausstiege", 
+           y = "Häufigkeit im Zeitraum", fill = "Legende") +
+      theme_light() # change to whatever looks best
+  })
   
   output$hourPlot <- renderPlot({
     plot(marginal_effects(hourm), points = F, plot = F)[[1]] + 

@@ -17,24 +17,28 @@ passengers = read.csv(paste0("data/processed/all_", hstID, "_enhanced.csv")) %>%
   filter(Ein != 0) %>%
   filter(Aus != 0) %>%
   filter(weekend == FALSE) %>%
-  filter(month == 3) %>%
+  # filter(month == 3) %>%
   filter(year == 2017) %>%
   mutate(month = as.factor(month)) %>%
   mutate(bank_holiday = as.factor(bank_holiday)) %>%
   mutate(event_send = as.factor(event_send)) %>%
   mutate(rush_hour = as.factor(rush_hour)) %>%
   mutate(weekend = as.factor(weekend)) %>%
+  mutate(precipType = as.factor(precipType)) %>%
   mutate(weekday = factor(weekday, 
                           ordered = TRUE,
                           levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")))
-
-
 
 noOfCores <- parallel::detectCores()
 
 # stunde, wochentag, monat, wetter?
 
-weekdaym <- brm(Ein ~ weekday,
+weatherm <- brm(Ein ~ precipIntensity * temperature,
+                cores = noOfCores,
+                family = negbinomial,
+                data = passengers)
+
+  weekdaym <- brm(Ein ~ weekday,
                 cores = noOfCores,
                 family = negbinomial,
                 data = passengers)

@@ -17,8 +17,8 @@ ggplot(df, aes(X, Y, color = Ein)) +
   geom_point(alpha = .1)
 
 # Show spatial density of passengers entering busses
-ggplot(df, aes(X, Y, z=Ein)) +
-  stat_summary_hex(fun = function(x) sum(x), color="black")+
+ggplot(df, aes(X, Y, z = Ein)) +
+  stat_summary_hex(fun = function(x) sum(x), color = "black")+
   scale_colour_gradient2()+
   theme_economist()+
   theme(legend.position="right", legend.title = element_text(size=9))

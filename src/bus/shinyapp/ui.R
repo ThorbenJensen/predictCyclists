@@ -18,7 +18,7 @@ shinyUI(dashboardPage(skin="black",
     ),
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Uebersicht", tabName = "uebersicht"),
+      menuItem("Übersicht", tabName = "uebersicht"),
       menuItem("Karten", tabName = "karten")
     )
   ),
@@ -42,8 +42,8 @@ shinyUI(dashboardPage(skin="black",
                 ),
                 box(
                   title = "Einstellungen", width = 6, solidHeader = TRUE, status = "primary",
-                  sliderInput("uhrzeit1", "Uhrzeit:", min = 0, max = 24, value = Sys.time()),
-                  dateInput("datum1", "Datum:", value = Sys.time(), format = "dd-mm-yyyy", startview = "month", weekstart = 0, language = "de"),
+                  sliderInput("uhrzeit1", "Uhrzeit:", min = 0, max = 24, value = c(6, 22)),
+                  dateRangeInput("datum1", "Datum:", start = "2017-10-01", end = "2017-10-31", format = "dd-mm-yyyy", startview = "month", weekstart = 0, language = "de"),
                   textInput("haltestelle", " Haltestelle", value = " Hauptbahnhof"),
                   box(
                     title = "Wetter", width = 12, solidHeader = TRUE,
@@ -59,11 +59,11 @@ shinyUI(dashboardPage(skin="black",
                 box(
                   title = "Durchschnittliche Auslastung", width = 6, solidHeader = TRUE, status = "warning",
                   valueBoxOutput("einstiegeBox"),
-                  valueBoxOutput("ausstiegeBox")
-                  # box(
-                  #   title = "Hauptbahnhof", width = 12, solidHeader = TRUE,
-                  #   plotOutput(outputId = "auslastungPlot")
-                  # )
+                  valueBoxOutput("ausstiegeBox"),
+                  box(
+                    title = "Hauptbahnhof", width = 12, solidHeader = TRUE,
+                    plotOutput(outputId = "auslastungPlot")
+                  )
                   
                 ),
                 
