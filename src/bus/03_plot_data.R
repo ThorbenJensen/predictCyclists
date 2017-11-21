@@ -8,8 +8,9 @@ library(ggthemes)
 #hstID = "43901" # sophienstraße
 hstID = "41000" # hauptbahnhof
 df <- 
-  read.csv(paste0("data/processed/all_" , hstID,  "_enhanced.csv")) %>%
-  mutate(timestamp = as.POSIXct(timestamp))
+  read.csv(paste0("data/processed/all_" , hstID,  "_enhanced.csv")) 
+# %>%
+#  mutate(timestamp = as.POSIXct(timestamp))
 
 # check for spatial outliers: scatter plot of X and Y
 ggplot(df, aes(X, Y, color = Ein)) +
@@ -33,8 +34,8 @@ ggplot(df, aes(timestamp)) +
 
 # histogram of 'Ein' and 'Aus' -> shiny top right
 df %>%
-  #filter(hour > 4 & hour < 10) %>% # morning
-   filter(hour > 15 & hour < 21) %>% # afternoon
+  filter(hour > 4 & hour < 10) %>% # morning
+  # filter(hour > 15 & hour < 21) %>% # afternoon
   ggplot(data = .) +
     geom_histogram(position = "dodge", aes(x = Ein, fill = "Einstiege"), 
                    alpha = 0.75, binwidth = 1) + 

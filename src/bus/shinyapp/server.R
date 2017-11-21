@@ -85,46 +85,46 @@ shinyServer(function(input, output, session) {
   
   output$abschoepfungBox <- renderValueBox({
     infoBox(
-      "Voraussichtliche Abschoepfung", paste0(25), icon = icon("user-o"), color = "orange", fill = TRUE)
+      "Voraussichtliche Abschöpfung", paste0("84%"), icon = icon("user-o"), color = "orange", fill = TRUE)
   })
   
   output$auslastungBox <- renderValueBox({
     infoBox(
-      "Voraussichtliche Auslastung", paste0(25), icon = icon("bus"), color = "blue", fill = TRUE)
+      "Voraussichtliche Auslastung", paste0("77%"), icon = icon("bus"), color = "blue", fill = TRUE)
   })
   
   output$reichweiteBox <- renderValueBox({
     infoBox(
-      "Taegliche Displayreichweite", paste0(25), icon = icon("eye"), color = "yellow", fill = TRUE)
+      "Tägliche Displayreichweite", paste0("6345"), icon = icon("eye"), color = "yellow", fill = TRUE)
   })
   
   output$radaufkommenBox <- renderValueBox({
     infoBox(
-      "Allgemeines Radaufkommen", paste0(25), icon = icon("bicycle"), color = "green", fill = TRUE)
+      "Allgemeines Radaufkommen", paste0("NaN"), icon = icon("bicycle"), color = "green", fill = TRUE)
   })
   
   output$einstiegeBox <- renderValueBox({
     infoBox(
-      "Einstiege", paste0(25), icon = icon("arrow-up"), color = "olive", fill = TRUE)
+      "Einstiege", paste0("64"), icon = icon("arrow-up"), color = "olive", fill = TRUE)
   })
   
   output$ausstiegeBox <- renderValueBox({
     infoBox(
-      "Ausstiege", paste0(25), icon = icon("arrow-down"), color = "maroon", fill = TRUE)
+      "Ausstiege", paste0("42"), icon = icon("arrow-down"), color = "maroon", fill = TRUE)
   })
   
-  output$auslastungPlot <- renderPlot({
-    
-    df %>%
-      #filter(hour > 4 & hour < 10) %>% # morning
-      # filter(hour > 15 & hour < 21) %>% # afternoon
-      ggplot(data = .) +
-      geom_histogram(position = "dodge", aes(x = Ein, fill = "Einstiege"), alpha = 0.75, binwidth = 1) + 
-      geom_histogram(position = "dodge", aes(x = Aus, fill = "Ausstiege"), alpha = 0.75, binwidth = 1) +
-      labs(title = "Ein- und Ausstiege", x = "Anzahl Ein- / Ausstiege", y = "Häufigkeit im Zeitraum", fill = "Legende") +
-      theme_light()
-    
-  })
+  # output$auslastungPlot <- renderPlot({
+  #   
+  #   df %>%
+  #     #filter(hour > 4 & hour < 10) %>% # morning
+  #     # filter(hour > 15 & hour < 21) %>% # afternoon
+  #     ggplot(data = .) +
+  #     geom_histogram(position = "dodge", aes(x = Ein, fill = "Einstiege"), alpha = 0.75, binwidth = 1) + 
+  #     geom_histogram(position = "dodge", aes(x = Aus, fill = "Ausstiege"), alpha = 0.75, binwidth = 1) +
+  #     labs(title = "Ein- und Ausstiege", x = "Anzahl Ein- / Ausstiege", y = "Häufigkeit im Zeitraum", fill = "Legende") +
+  #     theme_light()
+  #   
+  # })
   
   output$hourPlot <- renderPlot({
     plot(marginal_effects(hourm), points = F, plot = F)[[1]] + 

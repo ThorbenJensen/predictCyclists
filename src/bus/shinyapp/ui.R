@@ -34,6 +34,13 @@ shinyUI(dashboardPage(skin="black",
       tabItem(tabName = "uebersicht",
               fluidRow(
                 box(
+                  title = "Prognosen", width = 12, solidHeader = TRUE,
+                  div(class="col-sm-6 col-md-6 col-lg-6", valueBoxOutput("abschoepfungBox")),
+                  div(class="col-sm-6 col-md-6 col-lg-6", valueBoxOutput("auslastungBox")),
+                  div(class="col-sm-6 col-md-6 col-lg-6", valueBoxOutput("reichweiteBox")),
+                  div(class="col-sm-6 col-md-6 col-lg-6", valueBoxOutput("radaufkommenBox"))
+                ),
+                box(
                   title = "Einstellungen", width = 6, solidHeader = TRUE, status = "primary",
                   sliderInput("uhrzeit1", "Uhrzeit:", min = 0, max = 24, value = Sys.time()),
                   dateInput("datum1", "Datum:", value = Sys.time(), format = "dd-mm-yyyy", startview = "month", weekstart = 0, language = "de"),
@@ -52,27 +59,31 @@ shinyUI(dashboardPage(skin="black",
                 box(
                   title = "Durchschnittliche Auslastung", width = 6, solidHeader = TRUE, status = "warning",
                   valueBoxOutput("einstiegeBox"),
-                  valueBoxOutput("ausstiegeBox"),
-                  box(
-                    title = "Hauptbahnhof", width = 12, solidHeader = TRUE,
-                    plotOutput(outputId = "auslastungPlot")
-                  ),
-                  box(
-                    title = "Hauptbahnhof, Tagesverlauf Einstiege, März 2017, Modellverlauf", width = 12, solidHeader = TRUE,
-                    plotOutput(outputId = "hourPlot")
-                  ),
-                  box(
-                    title = "Hauptbahnhof, Wochenverlauf Einstiege, März 2017, Modellverlauf", width = 12, solidHeader = TRUE,
-                    plotOutput(outputId = "weekdayPlot")
-                  )
+                  valueBoxOutput("ausstiegeBox")
+                  # box(
+                  #   title = "Hauptbahnhof", width = 12, solidHeader = TRUE,
+                  #   plotOutput(outputId = "auslastungPlot")
+                  # )
+                  
                 ),
                 
                 box(
-                  title = "Prognosen", width = 12, solidHeader = TRUE,
-                  div(class="col-sm-6 col-md-6 col-lg-6", valueBoxOutput("abschoepfungBox")),
-                  div(class="col-sm-6 col-md-6 col-lg-6", valueBoxOutput("auslastungBox")),
-                  div(class="col-sm-6 col-md-6 col-lg-6", valueBoxOutput("reichweiteBox")),
-                  div(class="col-sm-6 col-md-6 col-lg-6", valueBoxOutput("radaufkommenBox"))
+                  title = "", width = 12, solidHeader = TRUE,
+                  box(
+                    title = "Hauptbahnhof, Tagesverlauf Einstiege, März 2017, Modellverlauf", width = 6, solidHeader = TRUE,
+                    plotOutput(outputId = "hourPlot")
+                  ),
+                  box(
+                    title = "Hauptbahnhof, Wochenverlauf Einstiege, März 2017, Modellverlauf", width = 6, solidHeader = TRUE,
+                    plotOutput(outputId = "weekdayPlot")
+                  )),
+                box(
+                  title = "Vergleiche Einstiege - Prognose 08-11-2017", width = 8, solidHeader = TRUE,
+                  tags$img(src = "forecasts.png", width = "100%", height = "100%")
+                ), 
+                box(
+                  title = "Güte Prognose", width = 4, solidHeader = TRUE,
+                  tags$img(src = "guete.png", width = "100%", height = "100%")
                 )
                 
               )),
