@@ -43,8 +43,9 @@ load("../../../results/weekdayhbf.RData")
 shinyServer(function(input, output, session) {
    
   
-  histEin <- eventReactive(input$recalc, {
-    
+  modelPrediction <- eventReactive(input$recalc, {
+    # TODO via marginal_effects(model, newdata = data.frame(interestingColumn = c(1, 2, 3)))
+    # and appropriate call in the prediction plots
   })
   
   points <- eventReactive(input$recalc, {
@@ -142,6 +143,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$hourPlot <- renderPlot({
+    # TODO use modelPredict()
     plot(marginal_effects(hourm), points = F, plot = F)[[1]] + 
       labs(title = "", x = "Stunde", y = "Einstiege") + 
       scale_x_continuous(breaks = 7:22) + 
